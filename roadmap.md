@@ -1,3 +1,3 @@
-- [ ] Refine mobile hero, scroll progress, replay, and reduced motion.
-- [ ] Add AI project-copy editor using the existing stack.
-- [ ] Verify types, browser scrolling, and AI generation.
+- [x] Refine mobile hero, scroll progress, replay, and reduced motion.
+- [x] Add AI project-copy editor using the existing stack (session-only preview).
+- [x] Verify types through automatic compilation, browser scrolling, and real AI generation.

@@ -6,14 +6,9 @@ import { ArrowDown, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HeroCopyEditor from "./HeroCopyEditor";
 import car from "@/assets/car.png";
+import { HERO_STATS as STATS, DEFAULT_HERO_COPY as DEFAULT_COPY } from './hero-config';
 
 gsap.registerPlugin(ScrollTrigger);
-const DEFAULT_COPY = { headline: "WELCOME ITZ FIZZ", supporting: "" };
-const STATS = [
-  { value: "95%", label: "Precision Driven", tone: "stat-a" },
-  { value: "87%", label: "Performance Focused", tone: "stat-b" },
-  { value: "92%", label: "Innovation Powered", tone: "stat-c" },
-];
 
 export default function ScrollHero() {
   const root = useRef(null);
