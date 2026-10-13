@@ -1,120 +1,64 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { ArrowDown, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import HeroCopyEditor from "./HeroCopyEditor";
 import car from "@/assets/car.png";
+import { HERO_STATS as STATS, DEFAULT_HERO_COPY as DEFAULT_COPY } from './hero-config';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HEADLINE = "WELCOME ITZ FIZZ";
-
-// Easy to edit placeholder stats
-const STATS = [
-  { value: "95%", label: "Precision Driven", tone: "stat-a" },
-  { value: "87%", label: "Performance Focused", tone: "stat-b" },
-  { value: "92%", label: "Innovation Powered", tone: "stat-c" },
-];
-
 export default function ScrollHero() {
   const root = useRef(null);
+  const trigger = useRef(null);
+  const [copy, setCopy] = useState(DEFAULT_COPY);
+  useGSAP(() => {
+    const section = root.current;
+    if (!section) return;
+    const carEl = section.querySelector(".hero-car");
+    const road = section.querySelector(".hero-road");
+    const media = gsap.matchMedia();
+    media.add({ normal: "(prefers-reduced-motion: no-preference)", reduced: "(prefers-reduced-motion: reduce)" }, (context) => {
+      const reduced = context.conditions.reduced;
+      if (!reduced) {
+        // Entrance owns opacity only; scroll exclusively owns the car transform.
+        gsap.from(carEl, { opacity: 0.25, duration: 0.65, ease: "power2.out" });
+        gsap.from(".hero-heading, .hero-supporting", { opacity: 0, y: 12, duration: 0.65 });
+        gsap.from(".hero-stat", { opacity: 0, y: 12, stagger: 0.12, duration: 0.6 });
+      }
+      const distance = () => Math.max(0, road.clientWidth - carEl.clientWidth);
+      const timeline = gsap.timeline({ scrollTrigger: {
+        trigger: section, start: "top top", end: () => `+=${window.innerHeight * 1.8}`,
+        pin: !reduced, scrub: true, invalidateOnRefresh: true,
+      } });
+      trigger.current = timeline.scrollTrigger;
+      timeline.fromTo(".hero-progress", { scaleX: 0 }, { scaleX: 1, duration: 1, ease: "none" }, 0);
+      if (!reduced) {
+        timeline.fromTo(carEl, { x: 0 }, { x: distance, duration: 1, ease: "none" }, 0);
+        timeline.fromTo(".hero-trail", { scaleX: 0 }, { scaleX: 1, duration: 1, ease: "none" }, 0);
+      }
+    });
+    const refresh = () => ScrollTrigger.refresh();
+    carEl.addEventListener("load", refresh);
+    if (carEl.complete) refresh();
+    document.fonts?.ready.then(() => { if (section.isConnected) refresh(); });
+    return () => { carEl.removeEventListener("load", refresh); media.revert(); trigger.current = null; };
+  }, { scope: root });
 
-  useGSAP(
-    () => {
-      const letters = gsap.utils.toArray(".hero-letter");
-      const stats = gsap.utils.toArray(".hero-stat");
-      const carEl = root.current.querySelector(".hero-car");
-      const trail = root.current.querySelector(".hero-trail");
-      const road = root.current.querySelector(".hero-road");
-
-      // Initial load animation
-      const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
-      intro
-        .from(road, { scaleX: 0, transformOrigin: "left", duration: 1 })
-        .from(carEl, { xPercent: -40, opacity: 0, duration: 1.2 }, "-=0.6")
-        .from(".hero-hint", { opacity: 0, y: 10, duration: 0.6 }, "-=0.4");
-
-      // Scroll-driven animation (pinned)
-      const getDistance = () => road.offsetWidth - carEl.offsetWidth;
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top top",
-          end: "+=250%",
-          scrub: 1,
-          pin: true,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      tl.to(carEl, { x: getDistance, ease: "none", duration: 1 }, 0);
-      tl.to(trail, { width: () => getDistance() + carEl.offsetWidth / 2, ease: "none", duration: 1 }, 0);
-
-      // Reveal letters as the car passes them
-      letters.forEach((el, i) => {
-        tl.fromTo(
-          el,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.08, ease: "power2.out" },
-          (i / letters.length) * 0.9,
-        );
-      });
-
-      stats.forEach((el, i) => {
-        tl.fromTo(
-          el,
-          { opacity: 0, y: 40, scale: 0.95 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.15, ease: "power2.out" },
-          0.25 + i * 0.25,
-        );
-      });
-
-      tl.to(".hero-hint", { opacity: 0, duration: 0.1 }, 0);
-    },
-    { scope: root },
-  );
-
-  return (
-    <section ref={root} className="hero-section relative h-screen w-full overflow-hidden">
-      <div className="absolute inset-0 hero-glow" aria-hidden />
-
-      {/* Stats */}
-      <div className="absolute inset-x-0 top-[8%] z-20 mx-auto grid max-w-5xl grid-cols-1 gap-3 px-6 sm:grid-cols-3 sm:gap-5">
-        {STATS.map((s) => (
-          <div key={s.label} className={`hero-stat ${s.tone} rounded-2xl p-5 opacity-0 sm:p-6`}>
-            <p className="font-display text-4xl font-semibold sm:text-5xl">{s.value}</p>
-            <p className="mt-1 text-sm uppercase tracking-[0.2em] opacity-80">{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Road + headline + car */}
-      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 sm:top-[62%]">
-        <div className="hero-road relative h-[clamp(110px,18vw,220px)] w-full">
-          <div className="hero-trail absolute left-0 top-0 h-full w-0" />
-          <h1
-            className="font-display absolute inset-0 z-10 flex items-center justify-center gap-[0.3em] px-4 text-[clamp(1.6rem,7vw,6.5rem)] font-bold text-primary-foreground"
-            aria-label={HEADLINE}
-          >
-            {HEADLINE.split("").map((ch, i) => (
-              <span key={i} className="hero-letter inline-block opacity-0" aria-hidden>
-                {ch === " " ? "\u00A0" : ch}
-              </span>
-            ))}
-          </h1>
-          <img
-            src={car}
-            alt="Yellow sports car viewed from above"
-            width={1536}
-            height={768}
-            className="hero-car absolute left-0 top-1/2 z-20 h-[130%] w-auto -translate-y-1/2 drop-shadow-2xl"
-          />
-        </div>
-      </div>
-
-      <p className="hero-hint absolute bottom-8 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.4em] text-muted-foreground">
-        Scroll to drive
-      </p>
-    </section>
-  );
+  const replay = () => window.scrollTo({ top: trigger.current?.start ?? 0, behavior: "instant" });
+  return <section ref={root} className="hero-section">
+    <div className="hero-progress" aria-hidden="true" />
+    <header className="hero-tools"><span className="hero-brand">ITZ FIZZ</span><HeroCopyEditor onApply={setCopy} onReset={() => setCopy(DEFAULT_COPY)} /></header>
+    <div className="hero-stats">
+      {STATS.map(s => <div key={s.label} className={`hero-stat ${s.tone}`}><p className="stat-value font-display">{s.value}</p><p className="stat-label">{s.label}</p></div>)}
+    </div>
+    <div className="hero-title-block">
+      <h1 className="hero-heading font-display">{copy.headline.split(" ").map((word, i) => <span key={i}>{word}</span>)}</h1>
+      {copy.supporting && <p className="hero-supporting">{copy.supporting}</p>}
+    </div>
+    <div className="hero-road"><div className="hero-trail" aria-hidden="true" /><img src={car} alt="Yellow sports car viewed from above" width={1536} height={768} className="hero-car" /></div>
+    <footer className="hero-footer"><span className="hero-hint"><ArrowDown size={16} /> Scroll to drive</span><Button variant="ghost" size="sm" onClick={replay}><RotateCcw /> Replay Animation</Button></footer>
+  </section>;
 }

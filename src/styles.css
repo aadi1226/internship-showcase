@@ -154,12 +154,63 @@
   --stat-b: oklch(0.78 0.12 200);
   --stat-c: oklch(0.96 0.005 90);
 }
-.font-display { font-family: "Space Grotesk", system-ui, sans-serif; letter-spacing: 0.08em; }
-body { font-family: "DM Sans", system-ui, sans-serif; }
-.hero-glow { background: radial-gradient(ellipse at 50% 70%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 60%); }
-.hero-road { background: var(--road); }
-.hero-trail { background: var(--primary); }
-.hero-stat { color: var(--primary-foreground); box-shadow: 0 20px 40px -20px color-mix(in oklab, var(--background) 80%, transparent); }
+
+
+.font-display { font-family: "Space Grotesk", system-ui, sans-serif; letter-spacing: 0; }
+body { font-family: "DM Sans", system-ui, sans-serif; margin: 0; }
+.hero-section { position: relative; height: 100svh; min-height: 450px; width: 100%; overflow: hidden; background: var(--background); }
+.hero-progress { position: absolute; inset: 0 0 auto; height: 3px; z-index: 40; background: var(--primary); transform: scaleX(0); transform-origin: left; }
+.hero-tools { position: absolute; top: 22px; left: 5%; right: 5%; display: flex; align-items: center; justify-content: space-between; z-index: 30; }
+.hero-brand { font-size: 13px; font-weight: 700; color: var(--foreground); }
+.hero-stats { position: absolute; top: 15%; left: 8%; right: 8%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.hero-stat { padding: 22px; border-radius: 8px; color: var(--primary-foreground); }
+.stat-value { font-size: 44px; font-weight: 600; line-height: 1.15; }
+.stat-label { margin-top: 6px; font-size: 13px; text-transform: uppercase; }
 .stat-a { background: var(--stat-a); }
 .stat-b { background: var(--stat-b); }
 .stat-c { background: var(--stat-c); }
+.hero-title-block { position: absolute; top: 39%; left: 6%; right: 6%; text-align: center; }
+.hero-heading { display: flex; flex-wrap: wrap; justify-content: center; column-gap: 0.6em; margin: 0; font-size: 60px; font-weight: 700; line-height: 1.1; overflow-wrap: anywhere; }
+.hero-heading span { letter-spacing: 0.12em; }
+.hero-supporting { margin: 16px auto 0; max-width: 580px; font-size: 16px; color: var(--muted-foreground); }
+.hero-road { position: absolute; left: 5%; right: 5%; top: 64%; height: 140px; background: var(--road); border-top: 1px solid var(--muted-foreground); border-bottom: 1px solid var(--muted-foreground); }
+.hero-trail { position: absolute; inset: 0; transform: scaleX(0); transform-origin: left; background: color-mix(in oklab, var(--primary) 25%, var(--road)); }
+.hero-car { position: absolute; left: 0; top: 50%; width: 280px; height: 140px; object-fit: contain; transform: translateY(-50%); z-index: 2; }
+.hero-footer { position: absolute; left: 5%; right: 5%; bottom: 22px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.hero-hint { display: flex; gap: 8px; align-items: center; font-size: 12px; color: var(--muted-foreground); }
+.copy-dialog { max-height: 90svh; overflow-y: auto; background: var(--background); color: var(--foreground); border-color: var(--road); }
+.copy-form { display: grid; gap: 16px; }
+.copy-form label { display: grid; gap: 7px; font-size: 13px; }
+.copy-form input, .copy-form textarea, .copy-form select { width: 100%; padding: 10px 12px; border: 1px solid var(--muted-foreground); border-radius: 6px; background: var(--road); color: var(--foreground); font: inherit; }
+.copy-form :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.copy-result { border-top: 1px solid var(--road); padding-top: 16px; overflow-wrap: anywhere; }
+@media (max-width: 767px) {
+  .hero-tools { top: 16px; }
+  .hero-stats { top: 14%; left: 5%; right: 5%; gap: 8px; }
+  .hero-stat { padding: 16px 9px; }
+  .stat-value { font-size: 30px; }
+  .stat-label { font-size: 10px; line-height: 1.6; }
+  .hero-title-block { top: 36%; }
+  .hero-heading { font-size: 34px; row-gap: 8px; }
+  .hero-heading span:first-child { flex-basis: 100%; }
+  .hero-supporting { font-size: 13px; max-width: 340px; margin-top: 12px; }
+  .hero-road { top: 67%; height: 94px; }
+  .hero-car { width: 168px; height: 84px; }
+  .hero-footer { bottom: 18px; }
+}
+@media (max-width: 359px) {
+  .hero-heading { font-size: 28px; }
+  .stat-value { font-size: 26px; }
+  .hero-car { width: 144px; height: 72px; }
+  .hero-footer { left: 3%; right: 3%; }
+  .hero-hint { font-size: 10px; }
+}
+@media (min-width: 768px) and (max-height: 650px) {
+  .hero-stats { top: 16%; }
+  .hero-stat { padding: 12px 18px; }
+  .stat-value { font-size: 32px; }
+  .hero-heading { font-size: 42px; }
+  .hero-road { top: 65%; height: 95px; }
+  .hero-car { width: 220px; height: 110px; }
+}
+@media (prefers-reduced-motion: reduce) { .hero-section { height: auto; min-height: 100svh; } }

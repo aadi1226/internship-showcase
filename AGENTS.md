@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep the hero and copy editor in JSX; the existing TanStack TypeScript shell remains for framework compatibility.
+- Keep AI calls in server functions with server-only SDK helpers so credentials never enter the browser.
