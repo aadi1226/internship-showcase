@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import ScrollHero from "@/components/ScrollHero.jsx";
+import { AssessmentSections } from '@/components/AssessmentSections';
+import { publicSearch } from '@/lib/route-meta';
 
 export const Route = createFileRoute("/")({
+  validateSearch: publicSearch,
   head: () => ({
     meta: [
       { title: "Welcome Itz Fizz — Scroll-Driven Hero" },
@@ -19,11 +22,7 @@ function Index() {
   return (
     <main>
       <ScrollHero />
-      <section className="flex h-screen items-center justify-center px-6 text-center">
-        <p className="font-display max-w-xl text-2xl text-muted-foreground">
-          ENGINEERED FOR MOTION
-        </p>
-      </section>
+      <AssessmentSections />
     </main>
   );
 }
