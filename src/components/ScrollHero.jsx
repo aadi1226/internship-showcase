@@ -1,10 +1,12 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ArrowDown, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import HeroCopyEditor from "./HeroCopyEditor";
+import { Button as NavButton } from '@/components/ui/button';
+import { Link } from '@tanstack/react-router';
+import { useAssessment } from './AssessmentProvider';
 import car from "@/assets/car.png";
 import { HERO_STATS as STATS, DEFAULT_HERO_COPY as DEFAULT_COPY } from './hero-config';
 
@@ -13,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function ScrollHero() {
   const root = useRef(null);
   const trigger = useRef(null);
-  const [copy, setCopy] = useState(DEFAULT_COPY);
+  const { copy = DEFAULT_COPY, user } = useAssessment();
   useGSAP(() => {
     const section = root.current;
     if (!section) return;
@@ -50,7 +52,7 @@ export default function ScrollHero() {
   const replay = () => window.scrollTo({ top: trigger.current?.start ?? 0, behavior: "instant" });
   return <section ref={root} className="hero-section">
     <div className="hero-progress" aria-hidden="true" />
-    <header className="hero-tools"><span className="hero-brand">ITZ FIZZ</span><HeroCopyEditor onApply={setCopy} onReset={() => setCopy(DEFAULT_COPY)} /></header>
+    <header className="hero-tools"><span className="hero-brand">INTERNSHIP ASSESSMENT</span><NavButton asChild variant="ghost" size="sm"><Link to={user ? '/dashboard' : '/auth'}>AI copy editor</Link></NavButton></header>
     <div className="hero-stats">
       {STATS.map(s => <div key={s.label} className={`hero-stat ${s.tone}`}><p className="stat-value font-display">{s.value}</p><p className="stat-label">{s.label}</p></div>)}
     </div>

@@ -14,7 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      applications: {
+        Row: {
+          assessment_id: string
+          created_at: string
+          email: string
+          id: string
+          motivation: string
+          name: string
+          portfolio: string
+          skills: string
+          status: string
+        }
+        Insert: {
+          assessment_id: string
+          created_at?: string
+          email: string
+          id?: string
+          motivation: string
+          name: string
+          portfolio?: string
+          skills: string
+          status?: string
+        }
+        Update: {
+          assessment_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          motivation?: string
+          name?: string
+          portfolio?: string
+          skills?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "applications_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessments: {
+        Row: {
+          copy: Json
+          created_at: string
+          details: string
+          id: string
+          owner_id: string
+          project: string
+          skills: string
+          tone: string
+          updated_at: string
+        }
+        Insert: {
+          copy?: Json
+          created_at?: string
+          details: string
+          id?: string
+          owner_id?: string
+          project: string
+          skills: string
+          tone?: string
+          updated_at?: string
+        }
+        Update: {
+          copy?: Json
+          created_at?: string
+          details?: string
+          id?: string
+          owner_id?: string
+          project?: string
+          skills?: string
+          tone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          display_name: string
+          id: string
+        }
+        Insert: {
+          display_name?: string
+          id: string
+        }
+        Update: {
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
