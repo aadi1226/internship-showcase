@@ -142,3 +142,24 @@
     color: var(--color-foreground);
   }
 }
+
+:root {
+  --background: oklch(0.16 0.01 260);
+  --foreground: oklch(0.96 0.005 90);
+  --primary: oklch(0.86 0.17 95);
+  --primary-foreground: oklch(0.18 0.01 260);
+  --muted-foreground: oklch(0.65 0.01 260);
+  --road: oklch(0.24 0.01 260);
+  --stat-a: oklch(0.86 0.17 95);
+  --stat-b: oklch(0.78 0.12 200);
+  --stat-c: oklch(0.96 0.005 90);
+}
+.font-display { font-family: "Space Grotesk", system-ui, sans-serif; letter-spacing: 0.08em; }
+body { font-family: "DM Sans", system-ui, sans-serif; }
+.hero-glow { background: radial-gradient(ellipse at 50% 70%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 60%); }
+.hero-road { background: var(--road); }
+.hero-trail { background: var(--primary); }
+.hero-stat { color: var(--primary-foreground); box-shadow: 0 20px 40px -20px color-mix(in oklab, var(--background) 80%, transparent); }
+.stat-a { background: var(--stat-a); }
+.stat-b { background: var(--stat-b); }
+.stat-c { background: var(--stat-c); }
