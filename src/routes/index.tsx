@@ -20,7 +20,7 @@ function Index() {
     <main>
       <ScrollHero />
       <section className="flex h-screen items-center justify-center px-6 text-center">
-        <p className="font-display max-w-xl text-2xl tracking-[0.2em] text-muted-foreground">
+        <p className="font-display max-w-xl text-2xl text-muted-foreground">
           ENGINEERED FOR MOTION
         </p>
       </section>
