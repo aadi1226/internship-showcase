@@ -1,24 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
+import ScrollHero from "@/components/ScrollHero.jsx";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Welcome Itz Fizz — Scroll-Driven Hero" },
+      { name: "description", content: "A scroll-driven car hero animation built with React, Tailwind and GSAP ScrollTrigger." },
+      { property: "og:title", content: "Welcome Itz Fizz — Scroll-Driven Hero" },
+      { property: "og:description", content: "Scroll to drive the car and reveal the headline." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main>
+      <ScrollHero />
+      <section className="flex h-screen items-center justify-center px-6 text-center">
+        <p className="font-display max-w-xl text-2xl tracking-[0.2em] text-muted-foreground">
+          ENGINEERED FOR MOTION
+        </p>
+      </section>
+    </main>
   );
 }
