@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { useRouter } from '@tanstack/react-router';
+import { useRouter, useRouterState } from '@tanstack/react-router';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { getAssessment } from '@/lib/assessment.functions';
@@ -15,14 +15,11 @@ const assessmentContext = createContext<{
 
 export function AssessmentProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [selectedId, setSelectedId] = useState<string>();
   const router = useRouter();
-  const pathname = router.state.location.pathname;
-  const search = router.state.location.search as { assessment?: string };
+  const selectedId = useRouterState({ select: state => (state.location.search as { assessment?: string }).assessment });
   const queryClient = useQueryClient();
   const load = useServerFn(getAssessment);
-  useEffect(() => { setSelectedId(search.assessment); }, [pathname, search.assessment]);
-  const content = useQuery({ queryKey: ['assessment', selectedId], queryFn: () => load({ data: { id: selectedId } }) });
+  const content = useQuery({ queryKey: ['assessment', selectedId], queryFn: () => load({ data: { id: selectedId } }), refetchInterval: 30000 });
   useEffect(() => {
     let active = true;
     supabase.auth.getUser().then(({ data }) => { if (active) setUser(data.user); });
