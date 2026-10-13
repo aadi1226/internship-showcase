@@ -1,6 +1,6 @@
 - [x] Refine mobile hero, scroll progress, replay, and reduced motion.
 - [x] Add AI project-copy editor using the existing stack (session-only preview).
 - [x] Verify types through automatic compilation, browser scrolling, and real AI generation.
-- [ ] Connect saved assessment details and generated copy across projects, skills, and application pages.
-- [ ] Add editor profiles, sign-in, and private applicant review.
-- [ ] Verify saved editing and applicant submission end to end.
+- [x] Connect saved assessment details and generated copy across projects, skills, and application pages.
+- [x] Add editor profiles, sign-in, and private applicant review.
+- [ ] Verify signed-in saved editing and applicant submission end to end — blocked until the first editor signs in; no auth users exist.
